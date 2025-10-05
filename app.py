@@ -21,9 +21,9 @@ sns.set(style="whitegrid")
 # Known saved model candidates (Windows paths)
 # --------------------------------
 MODEL_CANDIDATES = [
-    ("XGBoost", r"D:\work\Exoplanet-Classification-NASA-Space-Apps\xg_boost_model.pkl"),
-    ("Logistic Regression", r"D:\work\Exoplanet-Classification-NASA-Space-Apps\logistic_regression_model.pkl"),
-    ("LightGBM", r"D:\work\Exoplanet-Classification-NASA-Space-Apps\lightgbm_model.pkl"),
+    ("XGBoost", "./models/xg_boost_model.pkl"),
+    ("Logistic Regression", "./models/logistic_regression_model.pkl"),
+    ("LightGBM", "./models/lightgbm_model.pkl"),
 ]
 
 # --------------------------------
@@ -83,11 +83,11 @@ df.columns = df.columns.str.strip()
 # Sidebar filters & options
 # --------------------------------
 st.sidebar.markdown("### Filters")
-dispo_vals = sorted(df["koi_disposition"].dropna().unique()) if "koi_disposition" in df.columns else []
-pick_dispo = st.sidebar.multiselect("koi_disposition", dispo_vals, default=dispo_vals)
+dispo_vals = sorted(df["koi_pdisposition"].dropna().unique()) if "koi_pdisposition" in df.columns else []
+pick_dispo = st.sidebar.multiselect("koi_pdisposition", dispo_vals, default=dispo_vals)
 
-if pick_dispo and "koi_disposition" in df.columns:
-    df = df[df["koi_disposition"].isin(pick_dispo)].copy()
+if pick_dispo and "koi_pdisposition" in df.columns:
+    df = df[df["koi_pdisposition"].isin(pick_dispo)].copy()
 
 num_cols = df.select_dtypes(include=[np.number]).columns.tolist()
 default_x = "koi_period" if "koi_period" in num_cols else (num_cols[0] if num_cols else None)
@@ -273,10 +273,10 @@ with tab_predict:
         FEATURES = auto_feats
 
     # ---------- Allow manual override ----------
-    with st.expander("Advanced: override feature list (comma-separated)"):
-        manual_feats = st.text_input("Feature columns", value="")
-        if manual_feats.strip():
-            FEATURES = [c.strip() for c in manual_feats.split(",") if c.strip()]
+    # with st.expander("Advanced: override feature list (comma-separated)"):
+    #     manual_feats = st.text_input("Feature columns", value="")
+    #     if manual_feats.strip():
+    #         FEATURES = [c.strip() for c in manual_feats.split(",") if c.strip()]
 
     # ---------- Friendly labels/tooltips ----------
     LABELS = {
